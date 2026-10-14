@@ -1,20 +1,145 @@
-# How to Get Started with Grid Splitter in .NET MAUI
+# Getting Started with .NET MAUI GridSplitter (SfGridSplitter)
 
-## Overview
+This section provides a quick overview for working with the SfGridSplitter for .NET MAUI. Walk through the entire process of creating a basic resizable layout with multiple panes.
 
-The Grid Splitter control in .NET MAUI enables users to resize adjacent panes dynamically at runtime, making application layouts more flexible and interactive. Instead of displaying content in fixed-size regions, developers can use the Grid Splitter to allow users to adjust the available space according to their needs. This improves usability and helps create responsive interfaces that adapt to different workflows and screen sizes.
+## Creating an application using the .NET MAUI GridSplitter
 
-Modern applications often contain multiple content regions such as navigation menus, property panels, data views, preview windows, and dashboards. In many cases, users may want to allocate more space to a particular section while reducing the size of another. The Grid Splitter control provides a simple solution by allowing users to drag a splitter between panes and instantly resize them without reloading the page or modifying the application layout programmatically.
+1. Create a new .NET MAUI application in Visual Studio.
+2. Syncfusion .NET MAUI components are available on [nuget.org](https://www.nuget.org/). To add SfGridSplitter to your project, open the NuGet package manager in Visual Studio, search for **Syncfusion.Maui.GridSplitter** and then install it.
 
-The Syncfusion Grid Splitter control simplifies the creation of resizable layouts by organizing content into multiple panes. Each pane can contain any .NET MAUI view, including labels, images, forms, lists, charts, or custom controls. When the user moves the splitter, the size of neighboring panes is automatically adjusted, providing a smooth and intuitive resizing experience.
+## Register the handler
 
-Getting started with the Grid Splitter control requires only a few steps. Developers can add the `SfGridSplitter` control to a page and define one or more `SplitterPane` elements to host application content. The control automatically handles pane arrangement, resizing behavior, and layout updates, allowing developers to focus on the application's functionality rather than manual layout calculations.
+To use this control inside an application, you must register the handler for Syncfusion® core.
 
-The Grid Splitter control is suitable for a wide range of applications, including file explorers, reporting tools, dashboards, development environments, management systems, and productivity applications. By enabling user-controlled resizing, applications become more adaptable and provide a desktop-like experience across different platforms supported by .NET MAUI.
+```C#
 
-This article demonstrates the basic implementation of the Grid Splitter control using two panes. The example shows how to add content to individual panes and create a simple resizable layout. Once familiar with the basic setup, developers can extend the control to support more advanced scenarios such as nested splitters, dynamic panes, and customized splitter styles.
+using Microsoft.Extensions.Logging;
+using Syncfusion.Maui.Core.Hosting;
 
-## Sample
+namespace GridSplitterGettingStarted
+{
+    public static class MauiProgram
+    {
+        public static MauiApp CreateMauiApp()
+        {
+            var builder = MauiApp.CreateBuilder();
+
+            builder
+                .UseMauiApp<App>()
+                .ConfigureSyncfusionCore()
+                .ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                });
+
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
+
+            return builder.Build();
+        }
+    }
+}
+
+```
+
+## Add a basic GridSplitter
+
+1. Import the control namespace `Syncfusion.Maui.GridSplitter` in XAML.
+2. Initialize the `SfGridSplitter` control.
+
+**XAML**
+
+```xml
+<ContentPage
+    ...
+    xmlns:gridSplitter="clr-namespace:Syncfusion.Maui.GridSplitter;assembly=Syncfusion.Maui.GridSplitter">
+
+    <gridSplitter:SfGridSplitter>
+
+        <gridSplitter:SplitterPane>
+            <Border Background="LightBlue"
+                    Padding="10">
+                <Label Text="Pane 1"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+        </gridSplitter:SplitterPane>
+
+        <gridSplitter:SplitterPane>
+            <Border Background="LightGreen"
+                    Padding="10">
+                <Label Text="Pane 2"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+        </gridSplitter:SplitterPane>
+
+    </gridSplitter:SfGridSplitter>
+
+</ContentPage>
+```
+
+**C#**
+
+```csharp
+using Syncfusion.Maui.GridSplitter;
+
+namespace GridSplitterGettingStarted
+{
+    public partial class MainPage : ContentPage
+    {
+        public MainPage()
+        {
+            InitializeComponent();
+
+            SfGridSplitter gridSplitter = new SfGridSplitter();
+
+            SplitterPane pane1 = new SplitterPane
+            {
+                Content = new Border
+                {
+                    Background = Colors.LightBlue,
+                    Padding = 10,
+                    Content = new Label
+                    {
+                        Text = "Pane 1",
+                        HorizontalOptions = LayoutOptions.Center,
+                        VerticalOptions = LayoutOptions.Center
+                    }
+                }
+            };
+
+            SplitterPane pane2 = new SplitterPane
+            {
+                Content = new Border
+                {
+                    Background = Colors.LightGreen,
+                    Padding = 10,
+                    Content = new Label
+                    {
+                        Text = "Pane 2",
+                        HorizontalOptions = LayoutOptions.Center,
+                        VerticalOptions = LayoutOptions.Center
+                    }
+                }
+            };
+
+            gridSplitter.AddPane(pane1);
+            gridSplitter.AddPane(pane2);
+
+            Content = gridSplitter;
+        }
+    }
+}
+```
+
+## Create a resizable pane layout using .NET MAUI GridSplitter
+
+The `SplitterPane` collection allows you to organize content into multiple resizable panes. In this example, the GridSplitter contains two panes with different background colors. Users can drag the splitter between the panes to dynamically adjust the available space at runtime.
+
+**XAML**
 
 ```xml
 <gridSplitter:SfGridSplitter>
@@ -40,26 +165,44 @@ This article demonstrates the basic implementation of the Grid Splitter control 
 </gridSplitter:SfGridSplitter>
 ```
 
-## Output
+**C#**
 
-- The Grid Splitter displays two separate panes.
-- Each pane contains its own content.
-- A splitter appears between the panes automatically.
-- Users can drag the splitter to resize adjacent panes.
-- The pane sizes update dynamically during interaction.
-- The layout remains responsive across different screen sizes.
-- The content inside each pane adjusts based on the available space.
+```csharp
+SfGridSplitter gridSplitter = new SfGridSplitter();
 
-## Key Benefits
+SplitterPane pane1 = new SplitterPane
+{
+    Content = new Border
+    {
+        Background = Colors.LightBlue,
+        Padding = 10,
+        Content = new Label
+        {
+            Text = "Pane 1",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center
+        }
+    }
+};
 
-- Easy to integrate into .NET MAUI applications.
-- Provides interactive pane resizing.
-- Improves application flexibility and usability.
-- Supports custom content inside each pane.
-- Reduces manual layout management.
-- Creates modern and responsive user interfaces.
-- Suitable for dashboards, editors, and enterprise applications.
+SplitterPane pane2 = new SplitterPane
+{
+    Content = new Border
+    {
+        Background = Colors.LightGreen,
+        Padding = 10,
+        Content = new Label
+        {
+            Text = "Pane 2",
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center
+        }
+    }
+};
 
-## Conclusion
+gridSplitter.AddPane(pane1);
+gridSplitter.AddPane(pane2);
 
-The Syncfusion Grid Splitter control provides a simple and effective way to create resizable layouts in .NET MAUI applications. By defining multiple `SplitterPane` elements within the `SfGridSplitter`, developers can quickly build interactive user interfaces that allow users to customize the available screen space. This makes the Grid Splitter an excellent choice for applications that require flexible and user-friendly layouts.
+Content = gridSplitter;
+```
+
